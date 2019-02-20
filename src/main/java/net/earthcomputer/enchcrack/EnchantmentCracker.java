@@ -141,14 +141,14 @@ public class EnchantmentCracker {
 	public static void toolDamageCheck(ItemStack stack, int damage) {
 		if (EnchantmentHelper.getEnchantments(stack).containsKey(Enchantments.UNBREAKING)) {
 			resetCracker("unbreaking");
-		} else if (stack.getItemDamage() + damage > stack.getMaxDamage() + 1 && stack.getItem() != Items.ELYTRA) {
+		} else if (stack.getDamage() + damage > stack.getMaxDamage() + 1 && stack.getItem() != Items.ELYTRA) {
 			resetCracker("itemBreak");
 		}
 	}
 
 	public static void resetCracker(String reason) {
 		if (crackState != EnumCrackState.UNCRACKED) {
-			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString(
+			Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(new TextComponentString(
 					TextFormatting.RED + I18n.format("enchCrack.reset", I18n.format("enchCrack.reset." + reason))));
 		}
 		resetCracker();
@@ -189,12 +189,12 @@ public class EnchantmentCracker {
 			List<EnchantmentData> enchs = getEnchantmentsInTable(slot);
 			if (enchs != null) {
 				for (EnchantmentData ench : enchs) {
-					lines.add("   " + ench.enchantment.getTranslatedName(ench.enchantmentLevel));
+					lines.add("   " + ench.enchantment.func_200305_d(ench.enchantmentLevel).getString());
 				}
 			}
 		}
 
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		int y = 0;
 		for (String line : lines) {
 			fontRenderer.drawString(line, 0, y, 0xffffff);
@@ -203,11 +203,11 @@ public class EnchantmentCracker {
 
 		y = gui.height - (wanted.size() + unwanted.size()) * fontRenderer.FONT_HEIGHT;
 		for (EnchantmentData ench : wanted) {
-			fontRenderer.drawString(ench.enchantment.getTranslatedName(ench.enchantmentLevel), 0, y, 0x00ff00);
+			fontRenderer.drawString(ench.enchantment.func_200305_d(ench.enchantmentLevel).getString(), 0, y, 0x00ff00);
 			y += fontRenderer.FONT_HEIGHT;
 		}
 		for (EnchantmentData ench : unwanted) {
-			fontRenderer.drawString(ench.enchantment.getTranslatedName(ench.enchantmentLevel), 0, y, 0xff0000);
+			fontRenderer.drawString(ench.enchantment.func_200305_d(ench.enchantmentLevel).getString(), 0, y, 0xff0000);
 			y += fontRenderer.FONT_HEIGHT;
 		}
 	}
@@ -254,7 +254,7 @@ public class EnchantmentCracker {
 		}
 
 		ItemStack itemToEnchant = container.tableInventory.getStackInSlot(0);
-		if (itemToEnchant.isEmpty() || !itemToEnchant.isItemEnchantable()) {
+		if (itemToEnchant.isEmpty() || !itemToEnchant.isEnchantable()) {
 			return;
 		}
 
@@ -301,7 +301,7 @@ public class EnchantmentCracker {
 					} else {
 						// check the right enchantment clue was generated
 						EnchantmentData clue = enchantments.get(rand.nextInt(enchantments.size()));
-						if (Enchantment.getEnchantmentID(clue.enchantment) != actualEnchantmentClues[slot]
+						if (clue.enchantment != Enchantment.getEnchantmentByID(actualEnchantmentClues[slot])
 								|| clue.enchantmentLevel != actualLevelClues[slot]) {
 							xpSeedItr.remove();
 							continue seedLoop;
@@ -453,7 +453,7 @@ public class EnchantmentCracker {
 		if (plan == null)
 			return EnchantManipulationStatus.IMPOSSIBLE;
 		
-		EntityPlayerSP player = Minecraft.getMinecraft().player;
+		EntityPlayerSP player = Minecraft.getInstance().player;
 
 		EnchantManipulationStatus status = manipulateEnchantmentsSanityCheck(player);
 		if (status != EnchantManipulationStatus.OK) {
@@ -468,7 +468,7 @@ public class EnchantmentCracker {
 				player.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, 90);
 				// sync rotation to server before we throw any items
 				player.connection.sendPacket(new CPacketPlayer.Rotation(player.rotationYaw, 90, player.onGround));
-				Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(
+				Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(
 						new TextComponentTranslation(I18n.format("enchCrack.insn.starting", plan.getItemsToThrow())));
 			}
 			for (int i = 0; i < plan.getItemsToThrow(); i++) {
@@ -490,7 +490,7 @@ public class EnchantmentCracker {
 						if (matchingSlot == null) {
 							return false;
 						}
-						Minecraft.getMinecraft().playerController.windowClick(player.inventoryContainer.windowId, matchingSlot.slotNumber, 0, ClickType.PICKUP, player);
+						Minecraft.getInstance().playerController.windowClick(player.inventoryContainer.windowId, matchingSlot.slotNumber, 0, ClickType.PICKUP, player);
 					}
 					if (player.inventory.getItemStack().isEmpty()) {
 						return false;
@@ -499,7 +499,7 @@ public class EnchantmentCracker {
 					for (int j = 0; j < 4; j++) {
 						playerRand.nextInt();
 					}
-					Minecraft.getMinecraft().playerController.windowClick(player.inventoryContainer.windowId,
+					Minecraft.getInstance().playerController.windowClick(player.inventoryContainer.windowId,
 							-999, 1, ClickType.PICKUP, player);
 					return true;
 				});
@@ -511,7 +511,7 @@ public class EnchantmentCracker {
 						if (!targetSlot.getHasStack()
 								|| (ItemStack.areItemStacksEqual(player.inventory.getItemStack(), targetSlot.getStack())
 										&& targetSlot.getStack().getCount() < targetSlot.getStack().getMaxStackSize())) {
-							Minecraft.getMinecraft().playerController.windowClick(player.inventoryContainer.windowId, targetSlot.slotNumber, 0, ClickType.PICKUP, player);
+							Minecraft.getInstance().playerController.windowClick(player.inventoryContainer.windowId, targetSlot.slotNumber, 0, ClickType.PICKUP, player);
 							if (player.inventory.getItemStack().isEmpty())
 								break;
 						}
@@ -550,7 +550,7 @@ public class EnchantmentCracker {
 				if (timeout > 100) {
 					ITextComponent message = new TextComponentTranslation("enchCrack.timeout");
 					message.getStyle().setColor(TextFormatting.RED);
-					Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(message);
+					Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(message);
 					tasks.clear();
 					timeout = 0;
 					crackState = EnumCrackState.CRACKED;
@@ -619,9 +619,9 @@ public class EnchantmentCracker {
 	// Same as above method, except does not assume the seed has been cracked. If it
 	// hasn't returns the clue given by the server
 	public static List<EnchantmentData> getEnchantmentsInTable(int slot) {
-		if (!(Minecraft.getMinecraft().player.openContainer instanceof ContainerEnchantment))
+		if (!(Minecraft.getInstance().player.openContainer instanceof ContainerEnchantment))
 			return Collections.emptyList();
-		ContainerEnchantment enchContainer = (ContainerEnchantment) Minecraft.getMinecraft().player.openContainer;
+		ContainerEnchantment enchContainer = (ContainerEnchantment) Minecraft.getInstance().player.openContainer;
 
 		if (crackState != EnumCrackState.CRACKED_ENCH_SEED && crackState != EnumCrackState.CRACKED
 				&& crackState != EnumCrackState.ENCHANT_MANIPULATING) {

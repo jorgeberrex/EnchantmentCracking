@@ -21,7 +21,7 @@ public abstract class MixinEnchantmentDamage extends Enchantment {
 		super(rarityIn, typeIn, slots);
 	}
 
-	@Inject(method = "onEntityDamaged", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;addPotionEffect(Lnet/minecraft/potion/PotionEffect;)V"))
+	@Inject(method = "onEntityDamaged", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;addPotionEffect(Lnet/minecraft/potion/PotionEffect;)Z"))
 	public void baneOfArthropodsHook(EntityLivingBase user, Entity target, int level, CallbackInfo ci) {
 		if (user instanceof EntityPlayerSP)
 			EnchantmentCracker.resetCracker("baneOfArthropods");

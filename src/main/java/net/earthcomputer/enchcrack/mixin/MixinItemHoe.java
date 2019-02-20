@@ -1,5 +1,7 @@
 package net.earthcomputer.enchcrack.mixin;
 
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.EnumActionResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,14 +15,19 @@ import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemHoe.class)
 public abstract class MixinItemHoe extends Item {
 
-	@Inject(method = "setBlock", at = @At("HEAD"))
-	public void onSetBlock(ItemStack stack, EntityPlayer player, World world, BlockPos pos, IBlockState state,
-			CallbackInfo ci) {
-		EnchantmentCracker.toolDamageCheck(stack, 1);
+	public MixinItemHoe(Properties properties) {
+		super(properties);
+	}
+
+	@Inject(method = "onItemUse", at = @At("HEAD"))
+	public void onSetBlock(ItemUseContext context,
+                           CallbackInfoReturnable<EnumActionResult> cir) {
+		EnchantmentCracker.toolDamageCheck(context.getItem(), 1);
 	}
 
 }

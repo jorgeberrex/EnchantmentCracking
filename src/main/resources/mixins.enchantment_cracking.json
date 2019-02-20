@@ -9,7 +9,6 @@
 		"MixinLivingBase",
 		"MixinPlayer",
 		"MixinPlayerSP",
-		"MixinPlayerControllerMP",
 		"MixinBlockCauldron",
 		"MixinContainer",
 		"MixinContainerBeacon",
@@ -27,7 +26,8 @@
 		"MixinEntityMooshroom",
 		"MixinEntityCreeper",
 		"MixinItemBow",
-		"MixinMinecraft"
+		"MixinMinecraft",
+		"MixinNetHandlerPlayClient"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -1,0 +1,10 @@
+{
+  "id": "enchantment_cracking",
+  "name": "Enchantment Cracking",
+  "authors": [
+    "Earthcomputer"
+  ],
+  "listeners": [
+    "net.earthcomputer.enchcrack.EnchCrack"
+  ]
+}

@@ -15,6 +15,10 @@ import net.minecraft.world.World;
 @Mixin(ItemBow.class)
 public abstract class MixinItemBow extends Item {
 
+	public MixinItemBow(Properties properties) {
+		super(properties);
+	}
+
 	@Inject(method = "onPlayerStoppedUsing", at = @At(value = "FIELD", target = "Lnet/minecraft/world/World;isRemote:Z"))
 	public void onOnPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entity, int timeLeft,
 			CallbackInfo ci) {

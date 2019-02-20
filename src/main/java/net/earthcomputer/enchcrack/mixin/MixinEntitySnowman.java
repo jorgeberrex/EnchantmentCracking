@@ -1,5 +1,6 @@
 package net.earthcomputer.enchcrack.mixin;
 
+import net.minecraft.entity.EntityType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,8 +18,8 @@ import net.minecraft.world.World;
 @Mixin(EntitySnowman.class)
 public abstract class MixinEntitySnowman extends EntityGolem {
 
-	public MixinEntitySnowman(World world) {
-		super(world);
+	public MixinEntitySnowman(EntityType<?> entityType, World world) {
+		super(entityType, world);
 	}
 
 	@Inject(method = "processInteract", at = @At("HEAD"))

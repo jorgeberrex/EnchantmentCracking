@@ -1,5 +1,6 @@
 package net.earthcomputer.enchcrack.mixin;
 
+import net.minecraft.entity.EntityType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,8 +19,8 @@ import net.minecraft.world.World;
 @Mixin(EntityLivingBase.class)
 public abstract class MixinLivingBase extends Entity {
 
-	public MixinLivingBase(World world) {
-		super(world);
+	public MixinLivingBase(EntityType<?> entityType, World world) {
+		super(entityType, world);
 	}
 
 	@Inject(method = "attackEntityFrom", at = @At("HEAD"))
@@ -31,7 +32,7 @@ public abstract class MixinLivingBase extends Entity {
 	@Inject(method = "updateItemUse", at = @At("HEAD"))
 	public void onUpdateItemUse(ItemStack stack, int eatingParticleCount, CallbackInfo ci) {
 		if (world.isRemote && (Object) this instanceof EntityPlayer) {
-			EnumAction action = stack.getItemUseAction();
+			EnumAction action = stack.getUseAction();
 			if (action == EnumAction.EAT || action == EnumAction.DRINK) {
 				EnchantmentCracker.resetCracker("eat");
 			}

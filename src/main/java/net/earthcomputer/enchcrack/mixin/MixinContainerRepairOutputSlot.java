@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(targets = "net.minecraft.inventory.ContainerRepair$2")
 public abstract class MixinContainerRepairOutputSlot extends Slot {
@@ -22,8 +23,8 @@ public abstract class MixinContainerRepairOutputSlot extends Slot {
 			+ "Lnet/minecraft/entity/player/EntityPlayer;"
 			+ "Lnet/minecraft/item/ItemStack;"
 			+ ")Lnet/minecraft/item/ItemStack;", at = @At("HEAD"))
-	public void onOnTake(EntityPlayer player, ItemStack stack, CallbackInfo ci) {
-		if (!player.capabilities.isCreativeMode) {
+	public void onOnTake(EntityPlayer player, ItemStack stack, CallbackInfoReturnable cir) {
+		if (!player.abilities.isCreativeMode) {
 			EnchantmentCracker.resetCracker("anvil");
 		}
 	}

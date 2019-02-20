@@ -2,6 +2,7 @@ package net.earthcomputer.enchcrack;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
+import net.minecraft.util.registry.IRegistry;
 
 public class EnchantmentInstance extends EnchantmentData {
 
@@ -9,7 +10,7 @@ public class EnchantmentInstance extends EnchantmentData {
 
 	public EnchantmentInstance(Enchantment enchantmentObj, int enchLevel) {
 		super(enchantmentObj, enchLevel);
-		hash = Enchantment.getEnchantmentID(enchantmentObj) + enchLevel;
+		hash = IRegistry.ENCHANTMENT.getId(enchantmentObj) + enchLevel;
 	}
 
 	@Override

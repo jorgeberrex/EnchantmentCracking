@@ -14,11 +14,11 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 @Mixin(GuiContainer.class)
 public class MixinGuiContainer extends GuiScreen {
 
-	@Redirect(method = "keyTyped", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;closeScreen()V") )
+	@Redirect(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;closeScreen()V") )
 	public void onCloseScreen(EntityPlayerSP player) {
 		if ((Object) this instanceof GuiInventory && EnchantmentCracker.isEnchantManipulating()) {
 			player.openContainer = player.inventoryContainer;
-			Minecraft.getMinecraft().displayGuiScreen(null);
+			Minecraft.getInstance().displayGuiScreen(null);
 		} else {
 			player.closeScreen();
 		}

@@ -17,6 +17,10 @@ import net.minecraft.world.World;
 @Mixin(ItemTool.class)
 public abstract class MixinItemTool extends Item {
 
+	public MixinItemTool(Properties properties) {
+		super(properties);
+	}
+
 	@Inject(method = "onBlockDestroyed", at = @At("HEAD"))
 	public void onOnBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos,
 			EntityLivingBase entity, CallbackInfoReturnable<Boolean> ci) {

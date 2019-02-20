@@ -17,6 +17,10 @@ import net.minecraft.world.World;
 @Mixin(ItemShears.class)
 public abstract class MixinItemShears extends Item {
 
+	public MixinItemShears(Properties properties) {
+		super(properties);
+	}
+
 	@Inject(method = "onBlockDestroyed", at = @At(value = "FIELD", target = "Lnet/minecraft/world/World;isRemote:Z"))
 	public void onOnBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos,
 			EntityLivingBase entity, CallbackInfoReturnable<Boolean> ci) {

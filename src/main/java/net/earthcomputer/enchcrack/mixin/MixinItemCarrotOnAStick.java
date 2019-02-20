@@ -17,6 +17,10 @@ import net.minecraft.world.World;
 @Mixin(ItemCarrotOnAStick.class)
 public abstract class MixinItemCarrotOnAStick extends Item {
 
+	public MixinItemCarrotOnAStick(Properties properties) {
+		super(properties);
+	}
+
 	@Inject(method = "onItemRightClick", at = @At("HEAD"))
 	public void onOnItemRightClick(World world, EntityPlayer player, EnumHand hand,
 			CallbackInfoReturnable<ActionResult<ItemStack>> ci) {

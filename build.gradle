@@ -1,53 +1,47 @@
 buildscript {
 	repositories {
 		mavenCentral()
-		maven {url 'http://files.minecraftforge.net/maven'}
-		maven {url 'http://repo.spongepowered.org/maven'}
+		maven {url = 'http://files.minecraftforge.net/maven'}
+		maven {url = 'http://repo.spongepowered.org/maven'}
+		maven {url = 'https://www.jitpack.io' }
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'com.github.Chocohead:ForgeGradle:jitpack-SNAPSHOT'
 		classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
 	}
 }
 
 apply plugin: 'java'
-apply plugin: 'net.minecraftforge.gradle.liteloader'
+apply plugin: 'net.minecraftforge.gradle.tweaker-client'
 apply plugin: 'org.spongepowered.mixin'
 
-minecraft.version = '1.12'
+minecraft.version = '1.13.2'
 
 group = 'net.earthcomputer.enchantment_cracking'
 archivesBaseName = "enchantment_cracking-${minecraft.version}"
 version = '1.0'
 
 minecraft {
-	mappings = 'snapshot_20180702'
-	runDir = 'run'
-	makeObfSourceJar = false
+    version = '1.13.2'
+    mappings = 'snapshot_20181130'
+    runDir = 'run'
+    tweakClass = 'org.dimdev.riftloader.launch.RiftLoaderClientTweaker'
+    makeObfSourceJar = false
 }
 
-litemod {
-	json {
-		name = 'enchantment_cracking'
-		displayName = 'Enchantment Cracking'
-		mcversion = project.minecraft.version
-		version = project.version
-		author = 'Earthcomputer'
-		mixinConfigs = ['mixins.enchantment_cracking.json']
-	}
+repositories {
+    mavenCentral()
+    maven { url = 'https://www.dimdev.org/maven/' }
+    maven { url = 'https://www.jitpack.io' }
+    maven { url = "http://repo.spongepowered.org/maven" }
+    maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
-sourceSets {
-	main {
-		ext.refMap = 'mixins.enchantment_cracking.refmap.json'
-	}
+
+dependencies {
+    compile 'com.github.Chocohead:Rift:jitpack-SNAPSHOT:dev'
 }
 
 mixin {
-	defaultObfuscationEnv notch
-}
-
-jar {
-	classifier = ''
-	baseName = archivesBaseName
-	from litemod.outputs
+	defaultObfuscationEnv = notch
+	add sourceSets.main, 'mixins.enchantment_cracking.refmap.json'
 }

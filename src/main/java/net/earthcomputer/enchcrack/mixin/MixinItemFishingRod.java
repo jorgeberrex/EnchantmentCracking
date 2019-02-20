@@ -17,7 +17,11 @@ import net.minecraft.world.World;
 @Mixin(ItemFishingRod.class)
 public abstract class MixinItemFishingRod extends Item {
 
-	@Inject(method = "onItemRightClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/EntityFishHook;handleHookRetraction()I"))
+	public MixinItemFishingRod(Properties properties) {
+		super(properties);
+	}
+
+	@Inject(method = "onItemRightClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/EntityFishHook;handleHookRetraction(Lnet/minecraft/item/ItemStack;)I"))
 	public void onOnItemRightClick(World world, EntityPlayer player, EnumHand hand,
 			CallbackInfoReturnable<ActionResult<ItemStack>> ci) {
 		if (world.isRemote) {

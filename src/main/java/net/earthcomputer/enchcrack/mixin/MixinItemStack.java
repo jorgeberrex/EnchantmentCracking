@@ -22,7 +22,7 @@ public abstract class MixinItemStack {
 			+ ")Z"))
 	public void onAttemptDamageItem(int amount, Random rand, EntityPlayerMP damager,
 			CallbackInfoReturnable<Boolean> ci) {
-		if (rand == Minecraft.getMinecraft().player.getRNG()) {
+		if (rand == Minecraft.getInstance().player.getRNG()) {
 			EnchantmentCracker.toolDamageCheck((ItemStack) (Object) this, amount);
 		}
 	}
